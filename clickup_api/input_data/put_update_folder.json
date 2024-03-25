@@ -1,0 +1,27 @@
+{
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "response": {
+    "body": {
+      "id": "90131426566",
+      "name": "Updated Folder Name",
+      "orderindex": -52,
+      "override_statuses": false,
+      "hidden": false,
+      "space": {
+        "id": "90130640240",
+        "name": "Space Test 22",
+        "access": true
+      },
+      "task_count": "0",
+      "archived": false,
+      "statuses": [
+      ],
+      "lists": [
+      ],
+      "permission_level": "create"
+    }
+  },
+  "status_code": 200
+}
