@@ -2,9 +2,10 @@ import json
 import logging
 
 import allure
+import pytest
 
-from clickup_api.conftest import get_authorized_teams
-from config.config import space_id, URL_CLICKUP
+from clickup_api.conftest import get_authorized_teams, create_space
+from config.config import URL_CLICKUP
 from helpers.rest_client import RestClient
 from helpers.validate_response import ValidateResponse
 from utils.logger import get_logger
@@ -14,16 +15,20 @@ LOGGER = get_logger(__name__, logging.DEBUG)
 
 class TestFolder:
     @classmethod
-    def setup_class(cls):
+    @pytest.fixture(autouse=True)
+    def setup_class(cls, create_space):
         """
         Setup class Method
         """
+        cls.list_folders = []
         LOGGER.debug("Setup Class Method")
         authorized_teams = get_authorized_teams()
         LOGGER.info("Authorized Teams: %s", authorized_teams)
+        cls.space_id = create_space
+        LOGGER.info("Space ID: %s", cls.space_id)
         cls.rest_client = RestClient()
         cls.validate = ValidateResponse()
-        cls.list_folders = []
+
 
     @allure.feature("Folders")
     @allure.title("Test get all folders")
@@ -33,7 +38,7 @@ class TestFolder:
         """
         Test get all folders
         """
-        url_clickup = URL_CLICKUP + "space/" + space_id + "/folder"
+        url_clickup = URL_CLICKUP + "space/" + self.space_id + "/folder"
         response = self.rest_client.request("get", url_clickup)
         self.validate.validate_response(response, "get_all_folders")
 
@@ -45,7 +50,7 @@ class TestFolder:
         """
         Test create folder
         """
-        url_clickup = URL_CLICKUP + "space/" + space_id + "/folder"
+        url_clickup = URL_CLICKUP + "space/" + self.space_id + "/folder"
         payload = {
             "name": "New Folder Name API"
         }
@@ -107,8 +112,9 @@ class TestFolder:
         Delete all folders used iin test
         """
         LOGGER.info('Cleanup space ...')
-        for id_folder in cls.list_folders:
-            url_clickup = URL_CLICKUP + "folder/" + id_folder
-            response = cls.rest_client.request("delete", url_clickup)
-            if response["status_code"] == 200:
-                LOGGER.info("Folder Id: %s deleted", id_folder)
+        # LOGGER.info('*****>> %s', cls.list_folders)
+        # for id_folder in cls.list_folders:
+        #     url_clickup = URL_CLICKUP + "folder/" + id_folder
+        #     response = cls.rest_client.request("delete", url_clickup)
+        #     if response["status_code"] == 200:
+        #         LOGGER.info("Folder Id: %s deleted", id_folder)

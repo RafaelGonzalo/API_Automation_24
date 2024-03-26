@@ -1,0 +1,9 @@
+{
+  "response": {
+    "body": {
+      "err": "To let admins manage this space, this feature must be turned on in the Workspace",
+      "ECODE": "PROJ_143"
+    }
+  },
+  "status_code": 403
+}

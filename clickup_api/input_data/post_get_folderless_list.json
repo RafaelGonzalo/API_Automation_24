@@ -1,0 +1,45 @@
+{
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "response": {
+    "body": {
+      "lists": [
+        {
+          "id": "901302696465",
+          "name": "New list API 124",
+          "orderindex": 0,
+          "content": "New list API 124",
+          "status": {
+            "status": "red",
+            "color": "#d33d44",
+            "hide_label": true
+          },
+          "priority": {
+            "priority": "urgent",
+            "color": "#f50000"
+          },
+          "assignee": "None",
+          "task_count": 0,
+          "due_date": "1567780450202",
+          "start_date": "None",
+          "folder": {
+            "id": "90131429007",
+            "name": "hidden",
+            "hidden": true,
+            "access": true
+          },
+          "space": {
+            "id": "90130640240",
+            "name": "Space Test 22",
+            "access": true
+          },
+          "archived": false,
+          "override_statuses": false,
+          "permission_level": "create"
+        }
+      ]
+    }
+  },
+  "status_code": 200
+}

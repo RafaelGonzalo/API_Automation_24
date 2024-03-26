@@ -15,25 +15,6 @@ class RestClient:
         self.session = requests.Session()
         self.session.headers.update(headers)
 
-    # def request(self, method_name, url, body=None, json_data=None):
-    #     """
-    #     Method to call to request methods
-    #     :param json_data: json serializable
-    #     :param method_name: GET, POST, PUT, DELETE
-    #     :param url: API URL
-    #     :param body: body to use in request
-    #     :return:
-    #     """
-    #     if json_data:
-    #         response = self.select_method(method_name, self.session)(url=url, json=json_data)
-    #     else:
-    #         response = self.select_method(method_name, self.session)(url=url, data=body)
-    #
-    #     LOGGER.debug("Status Code %s: ", response.status_code)
-    #     LOGGER.debug("Response Content %s: ", response.text)
-    #
-    #     return response
-
     def request(self, method_name, url, body=None):
         """
         Method to call to request methods

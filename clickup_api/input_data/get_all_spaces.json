@@ -1,0 +1,180 @@
+{
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "response": {
+    "body": {
+      "spaces": [
+        {
+          "id": "90130722918",
+          "name": "New Space Name API 29",
+          "color": "None",
+          "private": false,
+          "avatar": "None",
+          "admin_can_manage": "None",
+          "statuses": [
+            {
+              "id": "p90130722918_jxNOpyUi",
+              "status": "to do",
+              "type": "open",
+              "orderindex": 0,
+              "color": "#87909e"
+            },
+            {
+              "id": "p90130722918_KgDd8NAH",
+              "status": "complete",
+              "type": "closed",
+              "orderindex": 1,
+              "color": "#008844"
+            }
+          ],
+          "multiple_assignees": true,
+          "features": {
+            "due_dates": {
+              "enabled": true,
+              "start_date": true,
+              "remap_due_dates": true,
+              "remap_closed_due_date": false
+            },
+            "sprints": {
+              "enabled": false
+            },
+            "points": {
+              "enabled": false
+            },
+            "custom_items": {
+              "enabled": false
+            },
+            "tags": {
+              "enabled": true
+            },
+            "time_estimates": {
+              "enabled": true,
+              "rollup": true,
+              "per_assignee": false
+            },
+            "checklists": {
+              "enabled": true
+            },
+            "zoom": {
+              "enabled": false
+            },
+            "milestones": {
+              "enabled": false
+            },
+            "custom_fields": {
+              "enabled": true
+            },
+            "remap_dependencies": {
+              "enabled": true
+            },
+            "dependency_warning": {
+              "enabled": true
+            },
+            "status_pies": {
+              "enabled": false
+            },
+            "multiple_assignees": {
+              "enabled": true
+            },
+            "portfolios": {
+              "enabled": true
+            },
+            "emails": {
+              "enabled": true
+            },
+            "time_tracking": {
+              "default_to_billable": 2
+            }
+          },
+          "archived": false
+        },
+        {
+          "id": "90130724643",
+          "name": "New Space Name API 922",
+          "color": "None",
+          "private": false,
+          "avatar": "None",
+          "admin_can_manage": "None",
+          "statuses": [
+            {
+              "id": "p90130724643_ZgDNndx7",
+              "status": "to do",
+              "type": "open",
+              "orderindex": 0,
+              "color": "#87909e"
+            },
+            {
+              "id": "p90130724643_jT8mxetf",
+              "status": "complete",
+              "type": "closed",
+              "orderindex": 1,
+              "color": "#008844"
+            }
+          ],
+          "multiple_assignees": true,
+          "features": {
+            "due_dates": {
+              "enabled": true,
+              "start_date": true,
+              "remap_due_dates": true,
+              "remap_closed_due_date": false
+            },
+            "sprints": {
+              "enabled": false
+            },
+            "points": {
+              "enabled": false
+            },
+            "custom_items": {
+              "enabled": false
+            },
+            "tags": {
+              "enabled": true
+            },
+            "time_estimates": {
+              "enabled": true,
+              "rollup": true,
+              "per_assignee": false
+            },
+            "checklists": {
+              "enabled": true
+            },
+            "zoom": {
+              "enabled": false
+            },
+            "milestones": {
+              "enabled": false
+            },
+            "custom_fields": {
+              "enabled": true
+            },
+            "remap_dependencies": {
+              "enabled": true
+            },
+            "dependency_warning": {
+              "enabled": true
+            },
+            "status_pies": {
+              "enabled": false
+            },
+            "multiple_assignees": {
+              "enabled": true
+            },
+            "portfolios": {
+              "enabled": true
+            },
+            "emails": {
+              "enabled": true
+            },
+            "time_tracking": {
+              "default_to_billable": 2
+            }
+          },
+          "archived": false
+        }
+      ]
+    }
+  },
+  "status_code": 200
+}
