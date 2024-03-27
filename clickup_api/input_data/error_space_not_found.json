@@ -1,0 +1,9 @@
+{
+  "response": {
+    "body": {
+      "err": "Space not found",
+      "ECODE": "PROJ_006"
+    }
+  },
+  "status_code": 404
+}

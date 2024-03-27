@@ -10,7 +10,11 @@ LOGGER = get_logger(__name__, logging.DEBUG)
 class ValidateResponse:
 
     def validate_response(self, actual_response=None, endpoint=None):
-
+        """
+        Validate responses
+        :param actual_response
+        :param endpoint
+        """
         expected_response = self.read_input_data_json(f"{abs_path}/clickup_api/input_data/{endpoint}.json")
 
         if "body" in actual_response:
@@ -21,13 +25,12 @@ class ValidateResponse:
 
     def validate_value(self, expected_value, actual_value, key_compare):
         """
-
+        Validate the values
         :param expected_value:
         :param actual_value:
         :param key_compare:
-        :return:
         """
-        LOGGER.info("** Validating %s **", key_compare)
+        LOGGER.info("Validating %s", key_compare)
         error_message = f"Expecting '{expected_value}' but received '{actual_value}'"
         if key_compare == "body":
             if isinstance(actual_value, list):
@@ -46,7 +49,7 @@ class ValidateResponse:
     @staticmethod
     def read_input_data_json(file_name):
         """
-
+        Read json
         :param file_name:
         :return:
         """
@@ -59,18 +62,18 @@ class ValidateResponse:
         return data
 
     @staticmethod
-    def compare_json(json1, json2):
+    def compare_json(expected_json, response_json):
         """
-
-        :param json1:
-        :param json2:
+        Compare two jsons
+        :param expected_json:
+        :param response_json:
         :return:
         """
-        for key in json1.keys():
-            if key in json2.keys():
-                LOGGER.info("Key '%s' found in json2", key)
+        for key in expected_json.keys():
+            if key in response_json.keys():
+                LOGGER.info("Key '%s' found in response json", key)
             else:
-                LOGGER.info("Key '%s' not found in json2", key)
+                LOGGER.info("Key '%s' not found in response json", key)
                 return False
         return True
 

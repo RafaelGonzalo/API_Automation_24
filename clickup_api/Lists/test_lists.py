@@ -1,10 +1,18 @@
-import json
+"""
+Test module for the TestList class.
+
+This module contains tests for the 'Lists' endpoint of the "Clickup" application API
+API's Doc: https://clickup.com/api/
+
+Author: Rafael G. Alfaro Martinez
+Date: 03/26/24
+Version: 1.0
+"""
 import logging
 import random
-
 import allure
 
-from clickup_api.conftest import get_authorized_teams
+from clickup_api.conftest import get_authorized_teams, read_input_data_json
 from config.config import space_id, URL_CLICKUP
 from helpers.rest_client import RestClient
 from helpers.validate_response import ValidateResponse
@@ -14,6 +22,9 @@ LOGGER = get_logger(__name__, logging.DEBUG)
 
 
 class TestList:
+    """
+    This class contains tests for the 'Lists' endpoint
+    """
     @classmethod
     def setup_class(cls):
         """
@@ -48,15 +59,12 @@ class TestList:
         """
         LOGGER.debug("Create list")
         url_clickup = URL_CLICKUP + "space/" + space_id + "/list"
-        payload = {
-            "name": "New list API",
-            "content": f"New list API",
-            "due_date_time": False,
-            "priority": 1,
-            "status": "red"
-        }
+        random_number = random.randint(1, 1000)
+        payload = read_input_data_json("post_list")
+        payload["name"] = f"New list API {random_number}"
+        payload["content"] = payload["name"]
         rest_client = RestClient()
-        response = rest_client.request("post", url_clickup, body=json.dumps(payload))
+        response = rest_client.request("post", url_clickup, body=payload)
         id_list_created = response["body"]["id"]
         self.list_lists.append(id_list_created)
         self.validate.validate_response(response, "post_create_folderless_list")
@@ -68,7 +76,7 @@ class TestList:
     def test_get_list(self, create_list):
         """
         Test Get list
-        :param create_list: folder's ID
+        :param create_list: list's ID
         """
         LOGGER.debug("List to get: %s", create_list)
         url_clickup = URL_CLICKUP + "list/" + create_list
@@ -83,21 +91,15 @@ class TestList:
     def test_update_list(self, create_list):
         """
         Test Update list
-        :param create_list: folder's ID
+        :param create_list: list's ID
         """
-        LOGGER.debug("Folder to update: %s", create_list)
+        LOGGER.debug("List to update: %s", create_list)
         url_clickup = URL_CLICKUP + "list/" + create_list
-        payload = {
-            "name": "Updated List Name",
-            "content": "Updated List Content",
-            "due_date": 1567780450202,
-            "due_date_time": True,
-            "priority": 2,
-            "assignee": "none",
-            "status": "red",
-            "unset_status": True
-        }
-        response = self.rest_client.request("put", url_clickup, body=json.dumps(payload))
+        random_number = random.randint(1, 1000)
+        payload = read_input_data_json("post_list")
+        payload["name"] = f"Updated List Name {random_number}"
+        payload["content"] = payload["name"]
+        response = self.rest_client.request("put", url_clickup, body=payload)
         self.list_lists.append(create_list)
         self.validate.validate_response(response, "put_update_list")
 

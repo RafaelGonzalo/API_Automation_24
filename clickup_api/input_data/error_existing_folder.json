@@ -1,0 +1,9 @@
+{
+  "response": {
+    "body": {
+      "err": "Folder name taken",
+      "ECODE": "CAT_014"
+    }
+  },
+  "status_code": 400
+}

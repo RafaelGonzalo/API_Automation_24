@@ -5,7 +5,7 @@ from logging import Logger
 
 import pytest
 
-from config.config import URL_CLICKUP, space_id
+from config.config import URL_CLICKUP, space_id, abs_path
 from helpers.validate_response import ValidateResponse
 from utils.logger import get_logger
 from helpers.rest_client import RestClient
@@ -21,7 +21,6 @@ def get_authorized_teams():
     validate = ValidateResponse()
     LOGGER.debug("Get Authorized Teams (Workspaces)")
     url_clickup = URL_CLICKUP + "team"
-    LOGGER.info("URL URL %s", url_clickup)
     rest_client = RestClient()
     response = rest_client.request("get", url_clickup)
     validate.validate_response(response, "get_authorized_teams")
@@ -40,17 +39,11 @@ def create_list(request):
     LOGGER.debug("Create list fixture")
     url_clickup = URL_CLICKUP + "space/" + space_id + "/list"
     random_number = random.randint(1, 1000)
-    list_name = f"New list API {random_number}"
-    payload = {
-        "name": list_name,
-        "content": f"New list API {random_number}",
-        "due_date": 1567780450202,
-        "due_date_time": False,
-        "priority": 1,
-        "status": "red"
-    }
+    payload = read_input_data_json("post_list")
+    payload["name"] = f"New list API {random_number}"
+    payload["content"] = payload["name"]
     rest_client = RestClient()
-    response = rest_client.request("post", url_clickup, body=json.dumps(payload))
+    response = rest_client.request("post", url_clickup, body=payload)
     validate.validate_response(response, "post_create_folderless_list")
     list_id = response["body"]["id"]
     yield list_id
@@ -60,14 +53,14 @@ def create_list(request):
 def delete_list(list_id):
     """
     Delete a list
-    :param list_id: folder's ID
+    :param list_id: list's ID
     """
     LOGGER.info('Cleanup list...')
     url_clickup = URL_CLICKUP + "list/" + list_id
     rest_client = RestClient()
     response = rest_client.request("delete", url_clickup)
     if response["status_code"] == 200:
-        LOGGER.info("Folder Id: %s deleted", list_id)
+        LOGGER.info("List Id: %s deleted", list_id)
 
 
 @pytest.fixture()
@@ -80,12 +73,10 @@ def create_folder(request):
     LOGGER.debug("Create folder fixture")
     url_clickup = URL_CLICKUP + "space/" + space_id + "/folder"
     random_number = random.randint(1, 1000)
-    folder_name = f"New Folder API {random_number}"
-    payload = {
-        "name": folder_name
-    }
+    payload = read_input_data_json("post_folder")
+    payload["name"] = f"New Folder API {random_number}"
     rest_client = RestClient()
-    response = rest_client.request("post", url_clickup, body=json.dumps(payload))
+    response = rest_client.request("post", url_clickup, body=payload)
     validate.validate_response(response, "post_create_folder")
     folder_id = response["body"]["id"]
     yield folder_id
@@ -116,45 +107,10 @@ def create_space(request):
     team_id = get_authorized_teams()
     url_clickup = URL_CLICKUP + "team/" + team_id + "/space"
     random_number = random.randint(1, 1000)
-    space_name = f"New Space Name API {random_number}"
-    payload = {
-        "name": space_name,
-        "multiple_assignees": True,
-        "features": {
-            "due_dates": {
-                "enabled": True,
-                "start_date": False,
-                "remap_due_dates": True,
-                "remap_closed_due_date": False
-            },
-            "time_tracking": {
-                "enabled": False
-            },
-            "tags": {
-                "enabled": True
-            },
-            "time_estimates": {
-                "enabled": True
-            },
-            "checklists": {
-                "enabled": True
-            },
-            "custom_fields": {
-                "enabled": True
-            },
-            "remap_dependencies": {
-                "enabled": True
-            },
-            "dependency_warning": {
-                "enabled": True
-            },
-            "portfolios": {
-                "enabled": True
-            }
-        }
-    }
+    payload = read_input_data_json("put_space")
+    payload["name"] = f"New Space Name API {random_number}"
     rest_client = RestClient()
-    response = rest_client.request("post", url_clickup, body=json.dumps(payload))
+    response = rest_client.request("post", url_clickup, body=payload)
     validate.validate_response(response, "post_create_space")
     id_space = response["body"]["id"]
     yield id_space
@@ -174,11 +130,15 @@ def delete_space(id_space):
         LOGGER.info("Space Id: %s deleted", id_space)
 
 
-@pytest.fixture(scope="session")
-def abc():
-    LOGGER.info('### ABC Session Level Setup ###')
-    abc = 6
-    # os.environ["a"] = str(data)
-    yield abc
-    LOGGER.info('### ABC Session Level TearDown ### ***yield***')
-
+def read_input_data_json(endpoint):
+    """
+    :param endpoint: File name
+    :return: json
+    """
+    file_name = f"{abs_path}/clickup_api/payload/{endpoint}.json"
+    LOGGER.debug("Reading file %s", file_name)
+    with open(file_name, encoding="utf8") as json_file:
+        data = json.load(json_file)
+        LOGGER.debug("Content of '%s' : %s", file_name, data)
+        json_file.close()
+    return data
