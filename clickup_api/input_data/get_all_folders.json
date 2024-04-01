@@ -1,0 +1,30 @@
+{
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "response": {
+    "body": {
+      "folders": [
+        {
+          "id": "90131426451",
+          "name": "New Folder API 661",
+          "orderindex": -46,
+          "override_statuses": false,
+          "hidden": false,
+          "space": {
+            "id": "90130640240",
+            "name": "Space Test 22"
+          },
+          "task_count": "0",
+          "archived": false,
+          "statuses": [
+          ],
+          "lists": [
+          ],
+          "permission_level": "create"
+        }
+      ]
+    }
+  },
+  "status_code": 200
+}

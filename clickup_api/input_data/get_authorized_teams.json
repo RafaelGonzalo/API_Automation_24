@@ -1,0 +1,35 @@
+{
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+   "response": {
+    "body": {
+      "teams": [
+        {
+          "id": "9013114502",
+          "name": "Workspace",
+          "color": "#40BC86",
+          "avatar": "None",
+          "members": [
+            {
+              "user": {
+                "id": 78805517,
+                "username": "Rafael Alfaro",
+                "email": "rafael.alfaro.jala@gmail.com",
+                "color": "",
+                "profilePicture": "None",
+                "initials": "RA",
+                "role": 1,
+                "custom_role": "None",
+                "last_active": "1711399142930",
+                "date_joined": "1709522681863",
+                "date_invited": "1709522681863"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status_code": 200
+}

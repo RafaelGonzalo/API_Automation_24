@@ -1,0 +1,92 @@
+{
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "response": {
+    "body": {
+      "id": "90130722935",
+      "name": "New Space Name API 338",
+      "color": "None",
+      "private": false,
+      "avatar": "None",
+      "admin_can_manage": "None",
+      "statuses": [
+        {
+          "id": "p90130722935_XUhyF0I9",
+          "status": "to do",
+          "type": "open",
+          "orderindex": 0,
+          "color": "#87909e"
+        },
+        {
+          "id": "p90130722935_VFN2g9aj",
+          "status": "complete",
+          "type": "closed",
+          "orderindex": 1,
+          "color": "#008844"
+        }
+      ],
+      "multiple_assignees": true,
+      "features": {
+        "due_dates": {
+          "enabled": true,
+          "start_date": true,
+          "remap_due_dates": true,
+          "remap_closed_due_date": false
+        },
+        "sprints": {
+          "enabled": false
+        },
+        "points": {
+          "enabled": false
+        },
+        "custom_items": {
+          "enabled": false
+        },
+        "tags": {
+          "enabled": true
+        },
+        "time_estimates": {
+          "enabled": true,
+          "rollup": false,
+          "per_assignee": false
+        },
+        "checklists": {
+          "enabled": true
+        },
+        "zoom": {
+          "enabled": false
+        },
+        "milestones": {
+          "enabled": false
+        },
+        "custom_fields": {
+          "enabled": true
+        },
+        "remap_dependencies": {
+          "enabled": true
+        },
+        "dependency_warning": {
+          "enabled": true
+        },
+        "status_pies": {
+          "enabled": false
+        },
+        "multiple_assignees": {
+          "enabled": true
+        },
+        "portfolios": {
+          "enabled": true
+        },
+        "emails": {
+          "enabled": true
+        },
+        "time_tracking": {
+          "default_to_billable": 2
+        }
+      },
+      "archived": false
+    }
+  },
+  "status_code": 200
+}

@@ -1,0 +1,9 @@
+{
+  "response": {
+    "body": {
+      "err": "Space name invalid",
+      "ECODE": "PROJ_060"
+    }
+  },
+  "status_code": 400
+}

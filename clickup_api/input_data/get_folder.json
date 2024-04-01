@@ -1,0 +1,48 @@
+{
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "response": {
+    "body": {
+      "id": "90131426546",
+      "name": "New Folder API 156",
+      "orderindex": -47,
+      "override_statuses": false,
+      "hidden": false,
+      "space": {
+        "id": "90130640240",
+        "name": "Space Test 22",
+        "access": true
+      },
+      "task_count": "0",
+      "archived": false,
+      "statuses": [
+        {
+          "id": "p90130640240_Sx4raoIl",
+          "status": "to do",
+          "orderindex": 0,
+          "color": "#87909e",
+          "type": "open"
+        },
+        {
+          "id": "p90130640240_XknRp6pY",
+          "status": "in progress",
+          "orderindex": 1,
+          "color": "#5f55ee",
+          "type": "custom"
+        },
+        {
+          "id": "p90130640240_SusVL8KS",
+          "status": "complete",
+          "orderindex": 2,
+          "color": "#008844",
+          "type": "closed"
+        }
+      ],
+      "lists": [
+      ],
+      "permission_level": "create"
+    }
+  },
+  "status_code": 200
+}

@@ -1,0 +1,9 @@
+{
+  "response": {
+    "body": {
+      "err": "Project name invalid",
+      "ECODE": "CAT_021"
+    }
+  },
+  "status_code": 400
+}

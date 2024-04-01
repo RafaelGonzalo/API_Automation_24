@@ -1,0 +1,9 @@
+{
+  "response": {
+    "body": {
+      "err": "Space with this name already exists",
+      "ECODE": "PROJECT_023"
+    }
+  },
+  "status_code": 400
+}
