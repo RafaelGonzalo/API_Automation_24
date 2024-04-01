@@ -1,0 +1,9 @@
+{
+  "response": {
+    "body": {
+      "err": "List Name Invalid",
+      "ECODE": "SUBCAT_020"
+    }
+  },
+  "status_code": 400
+}

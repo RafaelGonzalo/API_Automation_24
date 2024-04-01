@@ -26,6 +26,7 @@ class TestFolder:
     """
     This class contains tests for the 'Folders' endpoint
     """
+
     @classmethod
     @pytest.fixture(autouse=True)
     def setup_class(cls, create_space):
@@ -117,12 +118,12 @@ class TestFolder:
         self.validate.validate_response(response, "delete_folder")
 
     @allure.feature("Folders")
-    @allure.title("Test that a folder with the same name cannot created")
+    @allure.title("Test that a folder with the same name cannot create")
     @allure.description("Test that a folder with the same name cannot created")
     @allure.tag("functional", "folder")
-    def test_that_creates_a_folder_with_the_same_name_cannot_created(self):
+    def test_that_creates_a_folder_with_the_same_name_cannot_create(self):
         """
-        Test that a folder with the same name cannot created
+        Test that a folder with the same name cannot create
         """
         response = None
         url_clickup = URL_CLICKUP + "space/" + self.space_id + "/folder"
@@ -136,15 +137,22 @@ class TestFolder:
                 self.list_folders.append(id_folder_created)
         self.validate.validate_response(response, "error_existing_folder")
 
+    @allure.feature("Folders")
+    @allure.title("Test empty json input returns 400 error")
+    @allure.description("response : folder Name Invalid with an invalid JSON input")
+    @allure.tag("functional", "folder")
+    def test_empty_json_input_returns_400_error(self):
+        """
+        Test create folder
+        """
+        url_clickup = URL_CLICKUP + "space/" + self.space_id + "/folder"
+        payload = {}
+        response = self.rest_client.request("post", url_clickup, body=payload)
+        self.validate.validate_response(response, "error_folder_name_Invalid")
+
     @classmethod
     def teardown_class(cls):
         """
         Delete all folders used iin test
         """
         LOGGER.info('Cleanup space ...')
-        # LOGGER.info('*****>> %s', cls.list_folders)
-        # for id_folder in cls.list_folders:
-        #     url_clickup = URL_CLICKUP + "folder/" + id_folder
-        #     response = cls.rest_client.request("delete", url_clickup)
-        #     if response["status_code"] == 200:
-        #         LOGGER.info("Folder Id: %s deleted", id_folder)

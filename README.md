@@ -17,16 +17,23 @@ The .env file must contain the following kyes:
 #### Additional functionality:
 - Get all folders
 
-**Task 3:** allure report app support (commited: 032724)
+### **Task 3:** allure report app support (commited: 040124)
+1. Implement 3 endpoints  of your API
+   - Folders
+   - Lists
+   - Spaces
+2. Reports in allure should be included
+3. At least 2 functional tests should be included
+   - Test that a folder with the same name cannot create
+   - Test Space with this name already exists
+   - Test Space not found
+   - Test empty json input returns 400 error [List, Folder, Space]
+#### Others things on the commits:
 - Fix some issues found by pylint app
 - Added response validation.
-- Included test cases for the 'List' endpoint.
-- Included test cases for the 'Sp[aces' endpoint.
 - Enhanced Spaces and Folders test cases.
-- Updated rest_client.py and validate_response.py files.
+- Updated and Enhanced rest_client.py and validate_response.py files.
 - Added JSON files for validation.
 - Included JSON payload for API requests.
-- Implemented functional tests.
 - Improved rest_client and configuration.
-- Enhanced conftest.py and validate_response.py files.
-- Added support for Allure report app.
+- ![img.png](Docs/img.png)

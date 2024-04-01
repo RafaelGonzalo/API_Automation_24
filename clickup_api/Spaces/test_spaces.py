@@ -146,6 +146,19 @@ class TestSpace:
         response = self.rest_client.request("get", url_clickup_update)
         self.validate.validate_response(response, "error_space_not_found")
 
+    @allure.feature("Spaces")
+    @allure.title("Test empty json input returns 400 error")
+    @allure.description("response : space  Name Invalid with an invalid JSON input")
+    @allure.tag("functional", "Spaces")
+    def test_create_space(self):
+        """
+        Test create space
+        """
+        url_clickup = URL_CLICKUP + "team/" + self.team_id + "/space"
+        payload = {}
+        response = self.rest_client.request("post", url_clickup, body=payload)
+        self.validate.validate_response(response, "error_space_name_Invalid")
+
     @classmethod
     def teardown_class(cls):
         """

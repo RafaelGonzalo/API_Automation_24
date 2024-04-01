@@ -11,9 +11,10 @@ Version: 1.0
 import logging
 import random
 import allure
+import pytest
 
 from clickup_api.conftest import get_authorized_teams, read_input_data_json
-from config.config import space_id, URL_CLICKUP
+from config.config import URL_CLICKUP
 from helpers.rest_client import RestClient
 from helpers.validate_response import ValidateResponse
 from utils.logger import get_logger
@@ -25,17 +26,21 @@ class TestList:
     """
     This class contains tests for the 'Lists' endpoint
     """
+    space_id = None
+
     @classmethod
-    def setup_class(cls):
+    @pytest.fixture(autouse=True)
+    def setup_class(cls, create_space):
         """
         Setup class Method
         """
+        cls.list_lists = []
         LOGGER.debug("Setup Class Method")
         authorized_teams = get_authorized_teams()
         LOGGER.info("Authorized Teams: %s", authorized_teams)
+        cls.space_id = create_space
         cls.rest_client = RestClient()
         cls.validate = ValidateResponse()
-        cls.list_lists = []
 
     @allure.feature("Lists")
     @allure.title("Test Get Folderless Lists")
@@ -45,7 +50,7 @@ class TestList:
         """
         Get Folderless Lists
         """
-        url_clickup = URL_CLICKUP + "space/" + space_id + "/list"
+        url_clickup = URL_CLICKUP + "space/" + self.space_id + "/list"
         response = self.rest_client.request("get", url_clickup)
         self.validate.validate_response(response, "post_get_folderless_list")
 
@@ -58,7 +63,7 @@ class TestList:
         Test Create Folder less lists
         """
         LOGGER.debug("Create list")
-        url_clickup = URL_CLICKUP + "space/" + space_id + "/list"
+        url_clickup = URL_CLICKUP + "space/" + self.space_id + "/list"
         random_number = random.randint(1, 1000)
         payload = read_input_data_json("post_list")
         payload["name"] = f"New list API {random_number}"
@@ -117,14 +122,24 @@ class TestList:
         response = self.rest_client.request("delete", url_clickup)
         self.validate.validate_response(response, "delete_list")
 
+    @allure.feature("Lists")
+    @allure.title("Test empty json input returns 400 error")
+    @allure.description("response : List Name Invalid with an invalid JSON input")
+    @allure.tag("functional", "list")
+    def test_empty_json_input_returns_400_error(self):
+        """
+        Test empty json input returns 400 error
+        """
+        rest_client = RestClient()
+        LOGGER.debug("Create list")
+        url_clickup = URL_CLICKUP + "space/" + self.space_id + "/list"
+        payload = {}
+        response = rest_client.request("post", url_clickup, body=payload)
+        self.validate.validate_response(response, "error_List_name_Invalid")
+
     @classmethod
     def teardown_class(cls):
         """
         Delete all lists used in test
         """
         LOGGER.info('Cleanup space ...')
-        for id_list in cls.list_lists:
-            url_clickup = URL_CLICKUP + "list/" + id_list
-            response = cls.rest_client.request("delete", url_clickup)
-            if response["status_code"] == 200:
-                LOGGER.info("List Id: %s deleted", id_list)

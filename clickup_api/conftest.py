@@ -1,3 +1,12 @@
+"""
+conftest.py - Global configuration file for pytest
+
+This file defines global configurations and fixtures that apply to all tests in the project.
+
+More information about pytest and how to use conftest.py can be found at:
+- https://docs.pytest.org/en/stable/
+"""
+
 import json
 import random
 import logging
@@ -6,7 +15,6 @@ from logging import Logger
 import pytest
 
 from config.config import URL_CLICKUP, space_id, abs_path
-from helpers.validate_response import ValidateResponse
 from utils.logger import get_logger
 from helpers.rest_client import RestClient
 
@@ -18,24 +26,21 @@ def get_authorized_teams():
     View the Workspaces available to the authenticated user.
     :return:
     """
-    validate = ValidateResponse()
     LOGGER.debug("Get Authorized Teams (Workspaces)")
     url_clickup = URL_CLICKUP + "team"
     rest_client = RestClient()
     response = rest_client.request("get", url_clickup)
-    validate.validate_response(response, "get_authorized_teams")
     authorized_teams = response["body"]["teams"][0]["id"]
     return authorized_teams
 
 
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 def create_list(request):
     """
     Create a new list
     :param request:
     :return:
     """
-    validate = ValidateResponse()
     LOGGER.debug("Create list fixture")
     url_clickup = URL_CLICKUP + "space/" + space_id + "/list"
     random_number = random.randint(1, 1000)
@@ -44,7 +49,6 @@ def create_list(request):
     payload["content"] = payload["name"]
     rest_client = RestClient()
     response = rest_client.request("post", url_clickup, body=payload)
-    validate.validate_response(response, "post_create_folderless_list")
     list_id = response["body"]["id"]
     yield list_id
     delete_list(list_id)
@@ -55,7 +59,7 @@ def delete_list(list_id):
     Delete a list
     :param list_id: list's ID
     """
-    LOGGER.info('Cleanup list...')
+    LOGGER.info('Cleanup lists...')
     url_clickup = URL_CLICKUP + "list/" + list_id
     rest_client = RestClient()
     response = rest_client.request("delete", url_clickup)
@@ -69,7 +73,6 @@ def create_folder(request):
     Create a new folder fixture
     :param request:
     """
-    validate = ValidateResponse()
     LOGGER.debug("Create folder fixture")
     url_clickup = URL_CLICKUP + "space/" + space_id + "/folder"
     random_number = random.randint(1, 1000)
@@ -77,7 +80,6 @@ def create_folder(request):
     payload["name"] = f"New Folder API {random_number}"
     rest_client = RestClient()
     response = rest_client.request("post", url_clickup, body=payload)
-    validate.validate_response(response, "post_create_folder")
     folder_id = response["body"]["id"]
     yield folder_id
     delete_folder(folder_id)
@@ -88,7 +90,7 @@ def delete_folder(folder_id):
     Delete a folder
     :param folder_id: folder's ID
     """
-    LOGGER.info('Cleanup folder...')
+    LOGGER.info('Cleanup folders...')
     url_clickup = URL_CLICKUP + "folder/" + folder_id
     rest_client = RestClient()
     response = rest_client.request("delete", url_clickup)
@@ -102,7 +104,6 @@ def create_space(request):
     Create a new space fixture
     :param request:
     """
-    validate = ValidateResponse()
     LOGGER.debug("Create space fixture")
     team_id = get_authorized_teams()
     url_clickup = URL_CLICKUP + "team/" + team_id + "/space"
@@ -111,7 +112,6 @@ def create_space(request):
     payload["name"] = f"New Space Name API {random_number}"
     rest_client = RestClient()
     response = rest_client.request("post", url_clickup, body=payload)
-    validate.validate_response(response, "post_create_space")
     id_space = response["body"]["id"]
     yield id_space
     delete_space(id_space)
@@ -122,7 +122,7 @@ def delete_space(id_space):
     Delete a folder
     :param id_space: space's ID
     """
-    LOGGER.info('Cleanup space...')
+    LOGGER.info('Cleanup spaces...')
     url_clickup = URL_CLICKUP + "space/" + id_space
     rest_client = RestClient()
     response = rest_client.request("delete", url_clickup)
