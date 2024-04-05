@@ -50,24 +50,23 @@ class ValidateResponse:
     def read_input_data_json(file_name):
         """
         Read json
-        :param file_name:
-        :return:
+        :param file_name: filer's name
+        :return: json
         """
         LOGGER.debug("Reading file %s", file_name)
         with open(file_name, encoding="utf8") as json_file:
             data = json.load(json_file)
         LOGGER.debug("Content of '%s' : %s", file_name, data)
         json_file.close()
-
         return data
 
     @staticmethod
     def compare_json(expected_json, response_json):
         """
         Compare two jsons
-        :param expected_json:
-        :param response_json:
-        :return:
+        :param expected_json: expected json
+        :param response_json: response json
+        :return: boolean
         """
         for key in expected_json.keys():
             if key in response_json.keys():
