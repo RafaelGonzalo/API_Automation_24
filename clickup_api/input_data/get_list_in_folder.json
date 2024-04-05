@@ -1,0 +1,45 @@
+{
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "response": {
+    "body": {
+      "lists": [
+        {
+          "id": "901302867776",
+          "name": "New list API 412",
+          "orderindex": 0,
+          "content": "New list API 412",
+          "status": {
+            "status": "red",
+            "color": "#d33d44",
+            "hide_label": true
+          },
+          "priority": {
+            "priority": "urgent",
+            "color": "#f50000"
+          },
+          "assignee": "None",
+          "task_count": 0,
+          "due_date": "None",
+          "start_date": "None",
+          "folder": {
+            "id": "90131529531",
+            "name": "New Folder API 520",
+            "hidden": false,
+            "access": true
+          },
+          "space": {
+            "id": "90130791232",
+            "name": "New Space Name API 736",
+            "access": true
+          },
+          "archived": false,
+          "override_statuses": false,
+          "permission_level": "create"
+        }
+      ]
+    }
+  },
+  "status_code": 200
+}

@@ -14,7 +14,7 @@ from logging import Logger
 
 import pytest
 
-from config.config import URL_CLICKUP, space_id, abs_path
+from config.config import URL_CLICKUP, abs_path
 from utils.logger import get_logger
 from helpers.rest_client import RestClient
 
@@ -24,97 +24,42 @@ LOGGER: Logger = get_logger(__name__, logging.DEBUG)
 def get_authorized_teams():
     """
     View the Workspaces available to the authenticated user.
-    :return:
+    :return: authorized_teams: authorized teams's id
     """
-    LOGGER.debug("Get Authorized Teams (Workspaces)")
-    url_clickup = URL_CLICKUP + "team"
     rest_client = RestClient()
+    LOGGER.debug("Get Authorized Teams (Workspaces)")
+    url_clickup = f"{URL_CLICKUP}team"
     response = rest_client.request("get", url_clickup)
     authorized_teams = response["body"]["teams"][0]["id"]
     return authorized_teams
 
 
-@pytest.fixture(autouse=True)
-def create_list(request):
-    """
-    Create a new list
-    :param request:
-    :return:
-    """
-    LOGGER.debug("Create list fixture")
-    url_clickup = URL_CLICKUP + "space/" + space_id + "/list"
-    random_number = random.randint(1, 1000)
-    payload = read_input_data_json("post_list")
-    payload["name"] = f"New list API {random_number}"
-    payload["content"] = payload["name"]
-    rest_client = RestClient()
-    response = rest_client.request("post", url_clickup, body=payload)
-    list_id = response["body"]["id"]
-    yield list_id
-    delete_list(list_id)
-
-
-def delete_list(list_id):
-    """
-    Delete a list
-    :param list_id: list's ID
-    """
-    LOGGER.info('Cleanup lists...')
-    url_clickup = URL_CLICKUP + "list/" + list_id
-    rest_client = RestClient()
-    response = rest_client.request("delete", url_clickup)
-    if response["status_code"] == 200:
-        LOGGER.info("List Id: %s deleted", list_id)
-
-
-@pytest.fixture()
-def create_folder(request):
-    """
-    Create a new folder fixture
-    :param request:
-    """
-    LOGGER.debug("Create folder fixture")
-    url_clickup = URL_CLICKUP + "space/" + space_id + "/folder"
-    random_number = random.randint(1, 1000)
-    payload = read_input_data_json("post_folder")
-    payload["name"] = f"New Folder API {random_number}"
-    rest_client = RestClient()
-    response = rest_client.request("post", url_clickup, body=payload)
-    folder_id = response["body"]["id"]
-    yield folder_id
-    delete_folder(folder_id)
-
-
-def delete_folder(folder_id):
-    """
-    Delete a folder
-    :param folder_id: folder's ID
-    """
-    LOGGER.info('Cleanup folders...')
-    url_clickup = URL_CLICKUP + "folder/" + folder_id
-    rest_client = RestClient()
-    response = rest_client.request("delete", url_clickup)
-    if response["status_code"] == 200:
-        LOGGER.info("Folder Id: %s deleted", folder_id)
-
-
-@pytest.fixture(scope="session")
-def create_space(request):
+@pytest.fixture(scope="class")
+def create_space_fixture(request):
     """
     Create a new space fixture
-    :param request:
+    :param request
     """
+    id_space = create_space()
+    yield id_space
+    delete_space(id_space)
+
+
+def create_space():
+    """
+    Create a new space
+    :return: id_space: Space's id
+    """
+    rest_client = RestClient()
     LOGGER.debug("Create space fixture")
     team_id = get_authorized_teams()
-    url_clickup = URL_CLICKUP + "team/" + team_id + "/space"
+    url_clickup = f"{URL_CLICKUP}team/{team_id}/space"
     random_number = random.randint(1, 1000)
     payload = read_input_data_json("put_space")
     payload["name"] = f"New Space Name API {random_number}"
-    rest_client = RestClient()
     response = rest_client.request("post", url_clickup, body=payload)
     id_space = response["body"]["id"]
-    yield id_space
-    delete_space(id_space)
+    return id_space
 
 
 def delete_space(id_space):
@@ -122,12 +67,157 @@ def delete_space(id_space):
     Delete a folder
     :param id_space: space's ID
     """
-    LOGGER.info('Cleanup spaces...')
-    url_clickup = URL_CLICKUP + "space/" + id_space
     rest_client = RestClient()
+    LOGGER.info('Cleanup spaces...')
+    url_clickup = f"{URL_CLICKUP}space/{id_space}"
     response = rest_client.request("delete", url_clickup)
     if response["status_code"] == 200:
         LOGGER.info("Space Id: %s deleted", id_space)
+    else:
+        LOGGER.error("Error deleting space with ID: %s", id_space)
+
+
+@pytest.fixture(scope="class")
+def create_folder_in_space_fixture(request):
+    """
+    Create a new space fixture
+    :param request:
+    """
+    id_space = create_space()
+    id_folder = create_folder_in_space(id_space)
+    yield id_space, id_folder
+    delete_folder(id_folder)
+    delete_space(id_space)
+
+
+def create_folder_in_space(space_id):
+    """
+    Create a new folder fixture
+    :param space_id: space's id
+    :return: folder_id: folder's id
+    """
+    rest_client = RestClient()
+    LOGGER.debug(f"Create folder on space_id: {space_id}")
+    url_clickup = f"{URL_CLICKUP}space/{space_id}/folder"
+    random_number = random.randint(1, 1000)
+    payload = read_input_data_json("post_folder")
+    payload["name"] = f"New Folder API {random_number}"
+    response = rest_client.request("post", url_clickup, body=payload)
+    folder_id = response["body"]["id"]
+    return folder_id
+
+
+def delete_folder(folder_id):
+    """
+    Delete a folder
+    :param folder_id: folder's ID
+    """
+    rest_client = RestClient()
+    LOGGER.info('Cleanup folders...')
+    url_clickup = f"{URL_CLICKUP}folder/{folder_id}"
+    response = rest_client.request("delete", url_clickup)
+    if response["status_code"] == 200:
+        LOGGER.info("Folder Id: %s deleted", folder_id)
+    else:
+        LOGGER.error("Error deleting folder with ID: %s", folder_id)
+
+
+def create_list(space_id):
+    """
+    Create a new list
+    :param space_id: space's id
+    :return: list's id
+    """
+    rest_client = RestClient()
+    LOGGER.debug("Create list")
+    url_clickup = f"{URL_CLICKUP}space/{space_id}/list"
+    random_number = random.randint(1, 1000)
+    payload = read_input_data_json("post_list")
+    payload["name"] = f"New list API {random_number}"
+    payload["content"] = payload["name"]
+    response = rest_client.request("post", url_clickup, body=payload)
+    list_id = response["body"]["id"]
+    return list_id
+
+
+def create_list_in_folder(folder_id):
+    """
+    Create a new list
+    :param folder_id: folder's ID
+    :return: list's id
+    """
+    LOGGER.debug(f"Create list in the folder {folder_id}")
+    url_clickup = f"{URL_CLICKUP}folder/{folder_id}/list"
+    random_number = random.randint(1, 1000)
+    payload = read_input_data_json("post_list")
+    payload["name"] = f"New list API {random_number}"
+    payload["content"] = payload["name"]
+    rest_client = RestClient()
+    response = rest_client.request("post", url_clickup, body=payload)
+    list_id = response["body"]["id"]
+    return list_id
+
+
+def delete_list(list_id):
+    """
+    Test Delete list
+    :param list_id: list's ID
+    """
+    url_clickup = URL_CLICKUP + "list/" + list_id
+    rest_client = RestClient()
+    response = rest_client.request("delete", url_clickup)
+    if response["status_code"] == 200:
+        LOGGER.info(f"list Id: {list_id} deleted")
+    else:
+        LOGGER.error(f"Error deleting list  with ID: {list_id}")
+
+
+def create_task(list_id):
+    """
+    Create a new task
+    :param list_id: List's id
+    :return: task's id
+    """
+    rest_client = RestClient()
+    LOGGER.debug("Create Task")
+    url_clickup = f"{URL_CLICKUP}list/{list_id}/task"
+    random_number = random.randint(1, 1000)
+    payload = read_input_data_json("post_task")
+    payload["name"] = f"New Task Name API {random_number}"
+    payload["description"] = payload["name"]
+    response = rest_client.request("post", url_clickup, body=payload)
+    task_id = response["body"]["id"]
+    return task_id
+
+
+def add_task_to_secondary_list(space_id):
+    """
+    Add the task to secondary list
+    :param space_id: space's id
+    :return: list_id_second, task_id: list's id , task's id
+    """
+    rest_client = RestClient()
+    list_id_fist = create_list(space_id)
+    list_id_second = create_list(space_id)
+    task_id = create_task(list_id_fist)
+    url_clickup = URL_CLICKUP + "list/" + list_id_second + "/task/" + task_id
+    response = rest_client.request("post", url_clickup)
+    LOGGER.debug("Response: %s", response)
+    return list_id_second, task_id
+
+
+def delete_task(task_id):
+    """
+    Delete list
+    :param task_id: task's id
+    """
+    rest_client = RestClient()
+    url_clickup = URL_CLICKUP + "task/" + task_id
+    response = rest_client.request("delete", url_clickup)
+    if response["status_code"] == 200:
+        LOGGER.info(f"list Id: {task_id} deleted")
+    else:
+        LOGGER.error(f"Error deleting list  with ID: {task_id}")
 
 
 def read_input_data_json(endpoint):
@@ -140,5 +230,4 @@ def read_input_data_json(endpoint):
     with open(file_name, encoding="utf8") as json_file:
         data = json.load(json_file)
         LOGGER.debug("Content of '%s' : %s", file_name, data)
-        json_file.close()
     return data

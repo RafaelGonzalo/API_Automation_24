@@ -43,11 +43,11 @@ class TestSpace:
     @allure.title("Test Get All Spaces")
     @allure.description("Test that all spaces are obtained")
     @allure.tag("acceptance", "Spaces")
-    def test_get_all_spaces(self, create_space):
+    def test_get_all_spaces(self, create_space_fixture):
         """
         Test get all spaces
         """
-        self.list_spaces.append(create_space)
+        self.list_spaces.append(create_space_fixture)
         url_clickup = URL_CLICKUP + "team/" + self.team_id + "/space"
         response = self.rest_client.request("get", url_clickup)
         self.validate.validate_response(response, "get_all_spaces")
@@ -72,28 +72,28 @@ class TestSpace:
     @allure.title("Test Get Space")
     @allure.description("Test that space is obtained")
     @allure.tag("acceptance", "Spaces")
-    def test_get_space(self, create_space):
+    def test_get_space(self, create_space_fixture):
         """
         Test to Get space
         :param create_space: space's ID
         """
-        LOGGER.debug("space to get: %s", create_space)
-        url_clickup_update = URL_CLICKUP + "space/" + create_space
+        LOGGER.debug("space to get: %s", create_space_fixture)
+        url_clickup_update = URL_CLICKUP + "space/" + create_space_fixture
         response = self.rest_client.request("get", url_clickup_update)
-        self.list_spaces.append(create_space)
+        self.list_spaces.append(create_space_fixture)
         self.validate.validate_response(response, "get_space")
 
     @allure.feature("Spaces")
     @allure.title("Test Update space")
     @allure.description("Test that Update the space")
     @allure.tag("functional", "Spaces")
-    def test_update_space(self, create_space):
+    def test_update_space(self, create_space_fixture):
         """
         Test Update space information
         :param create_space: space's ID
         """
-        LOGGER.debug("Space to update: %s", create_space)
-        url_clickup_update = URL_CLICKUP + "space/" + create_space
+        LOGGER.debug("Space to update: %s", create_space_fixture)
+        url_clickup_update = URL_CLICKUP + "space/" + create_space_fixture
         payload = read_input_data_json("put_space")
         payload["name"] = "Updated Space Name"
         response = self.rest_client.request("put", url_clickup_update, body=payload)
@@ -103,13 +103,13 @@ class TestSpace:
     @allure.title("Test Delete Space")
     @allure.description("Test that space is deleted")
     @allure.tag("acceptance", "Spaces")
-    def test_delete_space(self, create_space):
+    def test_delete_space(self, create_space_fixture):
         """
         Test Delete space
         :param create_space: space's ID
         """
-        LOGGER.debug("Space to delete: %s", create_space)
-        url_clickup = URL_CLICKUP + "space/" + create_space
+        LOGGER.debug("Space to delete: %s", create_space_fixture)
+        url_clickup = URL_CLICKUP + "space/" + create_space_fixture
         response = self.rest_client.request("delete", url_clickup)
         self.validate.validate_response(response, "delete_space")
 
