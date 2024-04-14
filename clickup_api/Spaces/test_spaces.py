@@ -150,7 +150,7 @@ class TestSpace:
     @allure.title("Test empty json input returns 400 error")
     @allure.description("response : space  Name Invalid with an invalid JSON input")
     @allure.tag("functional", "Spaces")
-    def test_create_space(self):
+    def test_create_space_with_empty_json(self):
         """
         Test create space
         """

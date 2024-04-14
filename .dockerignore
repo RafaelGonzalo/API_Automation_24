@@ -1,0 +1,6 @@
+.git
+.idea
+.ruff_cache
+reports/allure/
+CURL
+logs/*.log
