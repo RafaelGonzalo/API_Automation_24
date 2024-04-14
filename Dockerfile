@@ -1,33 +1,32 @@
-# imagen with python 3
+# Imagen con Python 3
 FROM python:3
 
-# maintainerlabel
+# Mantenedor
 LABEL maintainer="rafael.alfaro@jalasoft.com"
 
-# update system and install java
-RUN apt-get update && apt-get install -y default-jre &&  java -version
+# Actualizar el sistema y instalar Java
+RUN apt-get update && apt-get install -y default-jre && java -version
 
-# install allure
+# Instalar Allure
 RUN wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb && \
     dpkg -i allure_2.18.1-1_all.deb && rm allure_2.18.1-1_all.deb
 
-# copy the code to /opt/app folder
+# Copiar el código al directorio /opt/app
 COPY . /opt/app
 WORKDIR /opt/app
 
-# install virtualenv library/package, create virtualenv for the framework
-RUN python3 -m pip install --upgrade pip && python3 -m pip install --user virtualenv
+# Instalar la biblioteca/paquete virtualenv y crear un entorno virtual para el framework
+RUN python3 -m pip install --upgrade pip && \
+    python3 -m pip install virtualenv && \
+    python3 -m virtualenv env
 
-RUN python3 -m venv env
-# activate virtual environment
-RUN . env/bin/activate
+# Activar el entorno virtual y luego instalar los requisitos y ejecutar los tests
+RUN . env/bin/activate && \
+    python3 -m pip install -r requirements.txt && \
+    python3 -m pylint clickup_api/ --rcfile=.pylintrc && \
+    python -m pytest clickup_api/ -v -s --alluredir reports/allure/allure-results --clean-alluredir  && \
+    echo "source /opt/app/env/bin/activate" >> ~/.bashrc
 
-# install requirements
-RUN python3 -m pip install -r requirements.txt
-RUN python3 -m pylint clickup_api/ --rcfile=.pylintrc
-
-RUN python -m pytest clickup_api/ -v -s  --alluredir reports/allure/allure-results --clean-alluredir
-
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get autoclean && apt-get autoremove
+# Limpiar el sistema
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    apt-get autoclean && apt-get autoremove
