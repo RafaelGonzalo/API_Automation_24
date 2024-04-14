@@ -10,13 +10,12 @@ Version: 1.0
 """
 import logging
 import random
-import time
 
 import allure
 import pytest
 
-from clickup_api.conftest import read_input_data_json, create_list, create_list_in_folder, delete_list, create_task, \
-    add_task_to_secondary_list
+from clickup_api.conftest import read_input_data_json, create_list, create_list_in_folder, \
+    delete_list, create_task, add_task_to_secondary_list
 from config.config import URL_CLICKUP
 from helpers.rest_client import RestClient
 from helpers.validate_response import ValidateResponse
@@ -63,18 +62,18 @@ class TestList:
     @allure.title("Test Create List in Folder")
     @allure.description("Verify that a new list can be added to a folder.")
     @allure.tag("acceptance", "lists")
-    def test_create_lists_in_folder(self):
+    def test_create_list_in_folder(self):
         """
         Test Create List in Folder
         """
         LOGGER.debug("Create list in the folder: %s", self.folder_id)
         url_clickup = URL_CLICKUP + "folder/" + self.folder_id + "/list"
-        random_number = random.randint(1, 1000)
-        payload = read_input_data_json("post_list")
-        payload["name"] = f"New list API {random_number}"
-        payload["content"] = payload["name"]
+        random_number = random.randint(1, 100)
+        payload_json = read_input_data_json("post_list")
+        payload_json["name"] = f"New list {random_number}"
+        payload_json["content"] = payload_json["name"]
         rest_client = RestClient()
-        response = rest_client.request("post", url_clickup, body=payload)
+        response = rest_client.request("post", url_clickup, body=payload_json)
         self.list_lists.append(response["body"]["id"])
         self.validate.validate_response(response, "post_create_lists_in_folder")
 
@@ -102,12 +101,12 @@ class TestList:
         Test Create Folder less lists
         """
         LOGGER.debug("Create list")
+        rest_client = RestClient()
         url_clickup = URL_CLICKUP + "space/" + self.space_id + "/list"
         random_number = random.randint(1, 1000)
         payload = read_input_data_json("post_list")
         payload["name"] = f"New list API {random_number}"
         payload["content"] = payload["name"]
-        rest_client = RestClient()
         response = rest_client.request("post", url_clickup, body=payload)
         id_list_created = response["body"]["id"]
         self.list_lists.append(id_list_created)

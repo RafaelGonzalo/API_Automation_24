@@ -35,10 +35,9 @@ def get_authorized_teams():
 
 
 @pytest.fixture(scope="class")
-def create_space_fixture(request):
+def create_space_fixture():
     """
     Create a new space fixture
-    :param request
     """
     id_space = create_space()
     yield id_space
@@ -78,10 +77,9 @@ def delete_space(id_space):
 
 
 @pytest.fixture(scope="class")
-def create_folder_in_space_fixture(request):
+def create_folder_in_space_fixture():
     """
     Create a new space fixture
-    :param request:
     """
     id_space = create_space()
     id_folder = create_folder_in_space(id_space)
@@ -97,7 +95,7 @@ def create_folder_in_space(space_id):
     :return: folder_id: folder's id
     """
     rest_client = RestClient()
-    LOGGER.debug(f"Create folder on space_id: {space_id}")
+    LOGGER.debug("Create folder on space_id: %s", space_id)
     url_clickup = f"{URL_CLICKUP}space/{space_id}/folder"
     random_number = random.randint(1, 1000)
     payload = read_input_data_json("post_folder")
@@ -146,7 +144,7 @@ def create_list_in_folder(folder_id):
     :param folder_id: folder's ID
     :return: list's id
     """
-    LOGGER.debug(f"Create list in the folder {folder_id}")
+    LOGGER.debug("Create list in the folder %s", folder_id)
     url_clickup = f"{URL_CLICKUP}folder/{folder_id}/list"
     random_number = random.randint(1, 1000)
     payload = read_input_data_json("post_list")
@@ -167,9 +165,9 @@ def delete_list(list_id):
     rest_client = RestClient()
     response = rest_client.request("delete", url_clickup)
     if response["status_code"] == 200:
-        LOGGER.info(f"list Id: {list_id} deleted")
+        LOGGER.info("List Id: %s deleted", list_id)
     else:
-        LOGGER.error(f"Error deleting list  with ID: {list_id}")
+        LOGGER.error("Error deleting list with ID: %s", list_id)
 
 
 def create_task(list_id):
@@ -215,9 +213,9 @@ def delete_task(task_id):
     url_clickup = URL_CLICKUP + "task/" + task_id
     response = rest_client.request("delete", url_clickup)
     if response["status_code"] == 200:
-        LOGGER.info(f"list Id: {task_id} deleted")
+        LOGGER.info("List Id: %s deleted", task_id)
     else:
-        LOGGER.error(f"Error deleting list  with ID: {task_id}")
+        LOGGER.error("Error deleting list with ID: %s", task_id)
 
 
 def read_input_data_json(endpoint):

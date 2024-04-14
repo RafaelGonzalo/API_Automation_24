@@ -1,0 +1,28 @@
+# imagen with python 3
+FROM python:3
+
+# maintainerlabel
+LABEL maintainer="rafael.alfaro@jalasoft.com"
+
+# update system and install java
+RUN apt-get update && apt-get install -y default-jre &&  java -version
+
+# install allure
+RUN wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb && \
+    dpkg -i allure_2.18.1-1_all.deb && rm allure_2.18.1-1_all.deb
+
+# copy the code to /opt/app folder
+COPY . /opt/app
+WORKDIR /opt/app
+
+# install virtualenv library/package, create virtualenv for the framework, and activate virtual environment
+RUN python3 -m pip install --upgrade pip && python3 -m pip install --user virtualenv && python3 -m venv env
+RUN . env/bin/activate
+RUN python3 -m pip install -r requirements.txt
+RUN python3 -m pylint clickup_api/ --rcfile=.pylintrc
+
+# clean up
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# specify command to run on container start
+CMD ["bash"]

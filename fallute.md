@@ -11,9 +11,8 @@
       - [Implement 3 endpoints of your API](#implement-3-endpoints-of-your-api)
    4. [Additional commit: (commited: 040524)](#additional-commit-commited-040524)
       - [Improvements and Bug Fixing](#improvements-and-bug-fixing)
-      - [Support](#support)
    5. [Task 4: Clean Code and task 4 (commit: 041424)](#task-4-clean-code-and-task-4-commit-041424)
-      
+      - [Support:](#support)
 
 ## Steps to execution the tests on Docker
 
@@ -51,7 +50,6 @@
 ## Historic:
 
 ### **Task 1:** about the cURL tool (commited: 030324)
-[CURL tool used on the 'clickup' app](CURL/CURL_Task_(CRUD).md)
 
 ### **Task 2:** Added basic CRUD for the Clickup application 'folder' API using the pytest module. (commited: 031724)
 
@@ -72,8 +70,11 @@ The .env file must contain the following kyes:
 - Cleanup
 
 #### Additional functionality:
+
 - Get all folders
+
 ### **Task 3:** allure report app support (commited: 040124)
+
 1. Implement 3 endpoints of your API
     - Folders
     - Lists
@@ -86,6 +87,7 @@ The .env file must contain the following kyes:
     - Test empty json input returns 400 error [List, Folder, Space]
 
 #### Others things on the commits:
+
 - Fix some issues found by pylint app
 - Added response validation.
 - Enhanced Spaces and Folders test cases.
@@ -107,7 +109,7 @@ The .env file must contain the following kyes:
 - Added a test for tasks on the list endpoint
 - Made several improvements to the folder, list, and space
 
-#### **Support:**
+### **Support:**
 
 **Folders:** Get Folders, Create Folder, Get Folder, Update Folder, Delete Folder
 
@@ -127,4 +129,3 @@ Task From List
 - Clean code and code refactoring
 - Support to Docker and .dockerignore file added
 - README.md file was updated
-

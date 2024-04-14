@@ -13,7 +13,8 @@ import random
 import allure
 import pytest
 
-from clickup_api.conftest import get_authorized_teams, create_space_fixture, read_input_data_json, create_folder_in_space
+# pylint: disable=W0611
+from clickup_api.conftest import create_space_fixture, read_input_data_json, create_folder_in_space
 from config.config import URL_CLICKUP
 from helpers.rest_client import RestClient
 from helpers.validate_response import ValidateResponse
@@ -21,7 +22,7 @@ from utils.logger import get_logger
 
 LOGGER = get_logger(__name__, logging.DEBUG)
 
-
+# pylint: disable=W0621
 class TestFolder:
     """
     This class contains tests for the 'Folders' endpoint
@@ -124,8 +125,9 @@ class TestFolder:
         random_number = random.randint(1, 1000)
         payload = read_input_data_json("post_folder")
         payload["name"] = f"New Folder Name API {random_number}"
-        for i in range(2):
+        for counter in range(2):
             response = self.rest_client.request("post", url_clickup, body=payload)
+            LOGGER.debug("Create folder: %s", counter)
         self.validate.validate_response(response, "error_existing_folder")
 
     @allure.feature("Folders")
